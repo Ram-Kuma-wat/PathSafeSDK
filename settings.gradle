@@ -1,0 +1,3 @@
+rootProject.name = "PathSafe SDK"
+include ':app'
+include ':pathsafesdk'
