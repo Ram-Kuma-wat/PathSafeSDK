@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class SafeLock implements OnResponse<UniverSelObjct>, OnAuthListener {
+public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
     static Activity mActivity;
     static long iniDateTime;
     static String deviceCode;
@@ -56,7 +56,7 @@ public class SafeLock implements OnResponse<UniverSelObjct>, OnAuthListener {
     ArrayList<SensitiveInfo> mInfo = new ArrayList<>();
 
 
-    public SafeLock(Activity activity, OnPSXAuthListener listener) {
+    public PathSafe(Activity activity, OnPSXAuthListener listener) {
         this.mActivity = activity;
         this.mAuthListener = listener;
         getInstance(mActivity);

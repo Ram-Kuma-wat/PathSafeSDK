@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.cwlib.pathsafe.SafeLock;
+import com.cwlib.pathsafe.PathSafe;
 import com.cwlib.pathsafe.beans.DevicesBean;
 import com.cwlib.pathsafe.beans.DeviceRecordsBean;
 import com.cwlib.pathsafe.listeners.OnPSXAuthListener;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 
 public class SplashActivity extends AppCompatActivity implements OnPSXAuthListener {
-    SafeLock mSafeLock;
+    PathSafe mSafeLock;
     EditText etId;
     TextView txtResult;
 
@@ -31,7 +31,7 @@ public class SplashActivity extends AppCompatActivity implements OnPSXAuthListen
         setContentView(R.layout.activity_splash);
         etId = findViewById(R.id.etLockId);
         txtResult = findViewById(R.id.txtResult);
-        mSafeLock = new SafeLock(SplashActivity.this, this);
+        mSafeLock = new PathSafe(SplashActivity.this, this);
       //  mSafeLock.authUser("uffizio", "uffizio123", "1.0", "Safe SDK demo");
         //mSafeLock.authUser("prashant67", "prashant67", "1.0", "Safe SDK demo");
         //mSafeLock.authUser("prashant67", "prashant67", "1.0", "Safe SDK demo");
