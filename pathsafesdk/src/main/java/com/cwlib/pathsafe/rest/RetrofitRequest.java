@@ -2,7 +2,7 @@ package com.cwlib.pathsafe.rest;
 
 import android.util.Log;
 
-import com.codersworld.configs.urls.common.Links;
+import com.cwlib.pathsafe.utils.AppUrls;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -33,15 +33,9 @@ public class RetrofitRequest {
     public static Retrofit retrofit;
      public static Retrofit getRetrofitInstance(int urlType,int converter) {
          retrofit=null;
-         String baseUrl = "";
-         if(urlType==1){
-             baseUrl = Links.BASE_URL_MEMBOCOOL;
-         }else if(urlType==3){
-             baseUrl = Links.BASE_URL_TTLOCK;
-         }else if(urlType==4){
-             baseUrl = Links.BASE_URL_TTLOCK1;
-         }else{
-             baseUrl = Links.BASE_URL_MMTHINKBIZ;
+         String baseUrl = AppUrls.PSX_BASE_URL;
+         if(urlType==3){
+             baseUrl = AppUrls.BASE_URL_TTLOCK;
          }
          if (retrofit == null) {
             Gson gson = new GsonBuilder()

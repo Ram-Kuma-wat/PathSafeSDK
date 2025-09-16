@@ -10,9 +10,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cwlib.pathsafe.SafeLock;
-import com.cwlib.pathsafe.beans.AllLocksBean;
-import com.cwlib.pathsafe.beans.LockRecordsBean;
-import com.cwlib.pathsafe.listeners.OnSafeAuthListener;
+import com.cwlib.pathsafe.beans.DevicesBean;
+import com.cwlib.pathsafe.beans.DeviceRecordsBean;
+import com.cwlib.pathsafe.listeners.OnPSXAuthListener;
 import com.cwlib.pathsafe.utils.CommonMethods;
 import com.codersworld.pathsafe.R;
 import com.google.gson.Gson;
@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 
-public class HomeActivity extends AppCompatActivity implements OnSafeAuthListener {
+public class HomeActivity extends AppCompatActivity implements OnPSXAuthListener {
     SafeLock mSafeLock;
     EditText etId;
     TextView txtResult;
@@ -35,19 +35,19 @@ public class HomeActivity extends AppCompatActivity implements OnSafeAuthListene
       //  mSafeLock.authUser("uffizio", "uffizio123", "1.0", "Safe SDK demo");
         //mSafeLock.authUser("prashant67", "prashant67", "1.0", "Safe SDK demo");
         //mSafeLock.authUser("prashant67", "prashant67", "1.0", "Safe SDK demo");
-        //mSafeLock.authUser("depl", "depl987", "1.0", "Safe SDK demo");
+        mSafeLock.authUser("fltlock@7896", "789654123", "1.0", "PathSafe SDK demo");
     }
 //        mSafeLock.getLockRecords("9605866");
     public void onOpen(View v) {
         if (CommonMethods.isValidString(etId.getText().toString())) {
-            mSafeLock.manualLockAction(etId.getText().toString(), 1);
+            mSafeLock.performDeviceAction(etId.getText().toString(), 1);
         } else {
             Toast.makeText(this, "Enter device id", Toast.LENGTH_SHORT).show();
         }
     }
     public void onClose(View v) {
         if (CommonMethods.isValidString(etId.getText().toString())) {
-            mSafeLock.manualLockAction(etId.getText().toString(), 0);
+            mSafeLock.performDeviceAction(etId.getText().toString(), 0);
         } else {
             Toast.makeText(this, "Enter device id", Toast.LENGTH_SHORT).show();
         }
@@ -61,7 +61,7 @@ public class HomeActivity extends AppCompatActivity implements OnSafeAuthListene
     }
 
     @Override
-    public void onSafeAuth(String errorCode, String message) {
+    public void onPSXAuth(String errorCode, String message) {
         Log.e("onSafeAuth", errorCode + "\n" + message);
         if (errorCode.equalsIgnoreCase("106")) {
             Toast.makeText(this, "Authenticated successfully.", Toast.LENGTH_SHORT).show();
@@ -70,24 +70,26 @@ public class HomeActivity extends AppCompatActivity implements OnSafeAuthListene
     }
 
     @Override
-    public void onSafeDevices(String errorCode, String message, ArrayList<AllLocksBean.InfoBean> mListLocks) {
+    public void onPSXDevices(String errorCode, String message, ArrayList<DevicesBean.InfoBean> mListLocks) {
         Log.e("onSafeDevices", errorCode + "\n" + message);
         if (errorCode.equalsIgnoreCase("106")) {
             if (CommonMethods.isValidArrayList(mListLocks)) {
                 Log.e("mListLocks", new Gson().toJson(mListLocks));
 
+/*
                 for (int a = 0; a < mListLocks.size(); a++) {
                     Log.e("locakname", mListLocks.get(a).getVehicleNumber());
                     if (mListLocks.get(a).getVehicleNumber().equalsIgnoreCase("FRANCHISE LOCK")) {
                         mSafeLock.openLock(System.currentTimeMillis(), mListLocks.get(a).getDeviceCode());
                     }
                 }
+*/
             }
         }
     }
 
     @Override
-    public void onSafeRecords(String errorCode, String message, ArrayList<LockRecordsBean.InfoBean> mListRecords) {
+    public void onPSXRecords(String errorCode, String message, ArrayList<DeviceRecordsBean.InfoBean> mListRecords) {
         Log.e("onSafeRecords", errorCode + "\n" + message);
         if (errorCode.equalsIgnoreCase("106")) {
             if (CommonMethods.isValidArrayList(mListRecords)) {
@@ -102,7 +104,7 @@ public class HomeActivity extends AppCompatActivity implements OnSafeAuthListene
     }
 
     @Override
-    public void onSafeLockAction(String code, String message, String type) {
+    public void onPSXDeviceAction(String code, String message, String type) {
         Toast.makeText(this, " "+message, Toast.LENGTH_SHORT).show();
 
         Log.e("action_lock", code + "\n" + message + "\n" + type);

@@ -316,7 +316,6 @@
 
     <string name="add_sub_device">Add</string>
 
-    <!--Safeokart-->
     <string-array name="arr_qty_type">
         <item>Box</item>
         <item>Pieces</item>
@@ -349,18 +348,6 @@
     </string-array>
 
 
-    <string-array name="safeokart_array_status">
-        <item>Cancelled</item>
-        <item>Accepted</item>
-        <item>Completed</item>
-        <item>Out For Delivery</item>
-
-
-        <item>Ready for delivery</item>
-        <item>Packed</item>
-        <item>Parcel Packed</item>
-        <item>Delivered</item>
-    </string-array>
 
     <string-array name="tax_type">
         <item>Without Tax</item>
@@ -688,10 +675,7 @@ Take a Picture!"</string>
     <string name="retry_c">Retry</string>
     <string name="application_languages">Application Languages</string>
     <string name="application_theme">Application Theme</string>
-    <string name="add_money_to_safeobuddy_wallet">Add Money to PathSafe Wallet</string>
-    <string name="safeobuddy">PathSafe</string>
     <string name="money_will_be_added_to">Money will be added to</string>
-    <string name="safeobuddy_wallet">PathSafe Wallet</string>
     <string name="proceed_btn">Proceed</string>
     <string name="online">Online</string>
     <string name="offline_">Offline</string>

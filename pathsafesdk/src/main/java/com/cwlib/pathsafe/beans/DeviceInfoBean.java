@@ -8,16 +8,11 @@ import java.util.ArrayList;
 public class DeviceInfoBean implements Serializable {
     @SerializedName("success")
     int success;
-    @SerializedName("returnds")
-    ArrayList<InfoBean> returnds;
+    @SerializedName("info")
+    ArrayList<InfoBean> info;
+    @SerializedName("returnmessage")
+    String returnmessage;
 
-    public ArrayList<InfoBean> getReturnds() {
-        return returnds;
-    }
-
-    public void setReturnds(ArrayList<InfoBean> returnds) {
-        this.returnds = returnds;
-    }
 
     public int getSuccess() {
         return success;
@@ -27,56 +22,82 @@ public class DeviceInfoBean implements Serializable {
         this.success = success;
     }
 
+    public ArrayList<InfoBean> getInfo() {
+        return info;
+    }
+
+    public void setInfo(ArrayList<InfoBean> info) {
+        this.info = info;
+    }
+
+    public String getReturnmessage() {
+        return returnmessage;
+    }
+
+    public void setReturnmessage(String returnmessage) {
+        this.returnmessage = returnmessage;
+    }
+
     public static class InfoBean implements Serializable {
-        @SerializedName("LockId")
-        String LockId;
-        @SerializedName("LockCode")
-        String LockCode;
-        @SerializedName("MacId")
-        String MacId;
-        @SerializedName("Lockdata")
-        String Lockdata;
-        @SerializedName("VehicleNumber")
-        String VehicleNumber;
+        @SerializedName("Success")
+        String Success;
+        @SerializedName("vehicleno")
+        String vehicleno;
+        @SerializedName("lockid")
+        String lockid;
+        @SerializedName("lockname")
+        String lockname;
+        @SerializedName("MacID")
+        String MacID;
+        @SerializedName("ttlockdata")
+        String ttlockdata;
 
-        public String getLockId() {
-            return LockId;
+        public String getSuccess() {
+            return Success;
         }
 
-        public void setLockId(String lockId) {
-            LockId = lockId;
+        public void setSuccess(String success) {
+            Success = success;
         }
 
-        public String getLockCode() {
-            return LockCode;
+        public String getVehicleno() {
+            return vehicleno;
         }
 
-        public void setLockCode(String lockCode) {
-            LockCode = lockCode;
+        public void setVehicleno(String vehicleno) {
+            this.vehicleno = vehicleno;
         }
 
-        public String getMacId() {
-            return MacId;
+        public String getLockid() {
+            return lockid;
         }
 
-        public void setMacId(String macId) {
-            MacId = macId;
+        public void setLockid(String lockid) {
+            this.lockid = lockid;
         }
 
-        public String getLockdata() {
-            return Lockdata;
+        public String getLockname() {
+            return lockname;
         }
 
-        public void setLockdata(String lockdata) {
-            Lockdata = lockdata;
+        public void setLockname(String lockname) {
+            this.lockname = lockname;
         }
 
-        public String getVehicleNumber() {
-            return VehicleNumber;
+        public String getMacID() {
+            return MacID;
         }
 
-        public void setVehicleNumber(String vehicleNumber) {
-            VehicleNumber = vehicleNumber;
+        public void setMacID(String macID) {
+            MacID = macID;
+        }
+
+        public String getTtlockdata() {
+            return ttlockdata;
+        }
+
+        public void setTtlockdata(String ttlockdata) {
+            this.ttlockdata = ttlockdata;
         }
     }
 }

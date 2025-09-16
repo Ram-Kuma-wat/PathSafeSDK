@@ -7,269 +7,72 @@ import java.util.ArrayList;
 
 public class LoginBean implements Serializable {
     @SerializedName("success")
-    int success;
-    @SerializedName("message")
-    String message;
-    @SerializedName("loginvalidation")
-    ArrayList<InfoBean> loginvalidation;
+    private String success;
 
-    public int getSuccess() {
+    @SerializedName("returnmessage")
+    private ArrayList<InfoBean> returnMessage;
+
+    // Getters and setters
+    public String getSuccess() {
         return success;
     }
 
-    public void setSuccess(int success) {
+    public void setSuccess(String success) {
         this.success = success;
     }
 
-    public String getMessage() {
-        return message;
+    public ArrayList<InfoBean> getReturnMessage() {
+        return returnMessage;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setReturnMessage(ArrayList<InfoBean> returnMessage) {
+        this.returnMessage = returnMessage;
     }
 
-    public ArrayList<InfoBean> getLoginvalidation() {
-        return loginvalidation;
-    }
 
-    public void setLoginvalidation(ArrayList<InfoBean> loginvalidation) {
-        this.loginvalidation = loginvalidation;
-    }
 
-    public static class InfoBean implements Serializable {
-        @SerializedName("returnmessage")
-        String returnmessage;
-        @SerializedName("uid")
-        String uid;
-        @SerializedName("val1")
-        String val1;
-        @SerializedName("gcmstatus")
-        String gcmstatus;
-        @SerializedName("usercategory")
-        String usercategory;
-        @SerializedName("Blatlong")
-        String Blatlong;
-        @SerializedName("val2")
-        String val2;
-        @SerializedName("val3")
-        String val3;
-        @SerializedName("val4")
-        String val4;
-        @SerializedName("btmainuserId")
-        String btmainuserId;
-        @SerializedName("btmailpwd")
-        String btmailpwd;
-        @SerializedName("btusername")
-        String btusername;
-        @SerializedName("IsHotelUser")
-        String IsHotelUser;
-        @SerializedName("clientid")
-        String clientid;
-        @SerializedName("clientsecret")
-        String clientsecret;
-        @SerializedName("MainContactId")
-        String MainContactId;
-        @SerializedName("usertype")
-        String usertype;
-        @SerializedName("token")
-        String token;
-        @SerializedName("email")
-        String email;
-        @SerializedName("password")
-        String password;
-        @SerializedName("isbackupuser")
-        String isbackupuser;
-        @SerializedName("Phonetype")
-        String Phonetype;
-        @SerializedName("subuserrights")
-        String subuserrights;
-        @SerializedName("IsLockuser")
-        String IsLockuser;
-        @SerializedName("welcomename")
-        String welcomename;
-        @SerializedName("PasswordExpiredate")
-        String PasswordExpiredate;
-        @SerializedName("showmessage")
-        String showmessage;
-        @SerializedName("City")
-        String City;
-        @SerializedName("OTP")
-        String OTP;
-        @SerializedName("Paymentoption")
-        String Paymentoption;
-        @SerializedName("Country")
-        String Country;
-        @SerializedName("CustPayId")
-        String CustPayId;
-        @SerializedName("CurrentBalance")
-        String CurrentBalance;
-        @SerializedName("CurrentBalancelastest")
-        String CurrentBalancelastest;
-        @SerializedName("Nocheckdate")
-        String Nocheckdate;
-        @SerializedName("paymentscroll")
-        String paymentscroll;
-        @SerializedName("paymentmessage")
-        String paymentmessage;
+    public static class InfoBean implements Serializable{
+        @SerializedName("Success")
+        private String success;
 
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
+        @SerializedName("userdetailid")
+        private String userDetailId;
 
         @SerializedName("username")
-        String username="";
+        private String username;
 
-        public InfoBean() {
-        }
+        @SerializedName("firstname")
+        private String firstName;
 
-        public String getCurrentBalancelastest() {
-            return CurrentBalancelastest;
-        }
+        @SerializedName("fullname")
+        private String fullName;
 
-        public void setCurrentBalancelastest(String currentBalancelastest) {
-            CurrentBalancelastest = currentBalancelastest;
-        }
+        @SerializedName("usertype")
+        private String userType;
 
-        public String getNocheckdate() {
-            return Nocheckdate;
-        }
+        @SerializedName("mainuser")
+        private String mainUser;
 
-        public void setNocheckdate(String nocheckdate) {
-            Nocheckdate = nocheckdate;
-        }
+        @SerializedName("subuserdetailid")
+        private String subUserDetailId;
 
-        public String getPaymentscroll() {
-            return paymentscroll;
-        }
+        @SerializedName("CompanyID")
+        private String companyId;
 
-        public void setPaymentscroll(String paymentscroll) {
-            this.paymentscroll = paymentscroll;
-        }
+        @SerializedName("RoleID")
+        private String roleId;
 
-        public String getPaymentmessage() {
-            return paymentmessage;
-        }
+        @SerializedName("isemployeetpt")
+        private String isEmployeeTpt;
 
-        public void setPaymentmessage(String paymentmessage) {
-            this.paymentmessage = paymentmessage;
-        }
+        @SerializedName("createdbypimsid")
+        private String createdByPimsId;
 
-        public String getIsbackupuser() {
-            return isbackupuser;
-        }
+        @SerializedName("IsEmployeeManager")
+        private String isEmployeeManager;
 
-        public void setIsbackupuser(String isbackupuser) {
-            this.isbackupuser = isbackupuser;
-        }
-
-        public String getPhonetype() {
-            return Phonetype;
-        }
-
-        public void setPhonetype(String phonetype) {
-            Phonetype = phonetype;
-        }
-
-        public String getSubuserrights() {
-            return subuserrights;
-        }
-
-        public void setSubuserrights(String subuserrights) {
-            this.subuserrights = subuserrights;
-        }
-
-        public String getIsLockuser() {
-            return IsLockuser;
-        }
-
-        public void setIsLockuser(String isLockuser) {
-            IsLockuser = isLockuser;
-        }
-
-        public String getWelcomename() {
-            return welcomename;
-        }
-
-        public void setWelcomename(String welcomename) {
-            this.welcomename = welcomename;
-        }
-
-        public String getPasswordExpiredate() {
-            return PasswordExpiredate;
-        }
-
-        public void setPasswordExpiredate(String passwordExpiredate) {
-            PasswordExpiredate = passwordExpiredate;
-        }
-
-        public String getShowmessage() {
-            return showmessage;
-        }
-
-        public void setShowmessage(String showmessage) {
-            this.showmessage = showmessage;
-        }
-
-        public String getCity() {
-            return City;
-        }
-
-        public void setCity(String city) {
-            City = city;
-        }
-
-        public String getOTP() {
-            return OTP;
-        }
-
-        public void setOTP(String OTP) {
-            this.OTP = OTP;
-        }
-
-        public String getPaymentoption() {
-            return Paymentoption;
-        }
-
-        public void setPaymentoption(String paymentoption) {
-            Paymentoption = paymentoption;
-        }
-
-        public String getCountry() {
-            return Country;
-        }
-
-        public void setCountry(String country) {
-            Country = country;
-        }
-
-        public String getCustPayId() {
-            return CustPayId;
-        }
-
-        public void setCustPayId(String custPayId) {
-            CustPayId = custPayId;
-        }
-
-        public String getCurrentBalance() {
-            return CurrentBalance;
-        }
-
-        public void setCurrentBalance(String currentBalance) {
-            CurrentBalance = currentBalance;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
+        @SerializedName("password")
+        private String password;
 
         public String getPassword() {
             return password;
@@ -279,148 +82,111 @@ public class LoginBean implements Serializable {
             this.password = password;
         }
 
-        public String getReturnmessage() {
-            return returnmessage;
+        // Getters and setters
+        public String getSuccess() {
+            return success;
         }
 
-        public void setReturnmessage(String returnmessage) {
-            this.returnmessage = returnmessage;
+        public void setSuccess(String success) {
+            this.success = success;
         }
 
-        public String getUid() {
-            return uid;
+        public String getUserDetailId() {
+            return userDetailId;
         }
 
-        public void setUid(String uid) {
-            this.uid = uid;
+        public void setUserDetailId(String userDetailId) {
+            this.userDetailId = userDetailId;
         }
 
-        public String getVal1() {
-            return val1;
+        public String getUsername() {
+            return username;
         }
 
-        public void setVal1(String val1) {
-            this.val1 = val1;
+        public void setUsername(String username) {
+            this.username = username;
         }
 
-        public String getGcmstatus() {
-            return gcmstatus;
+        public String getFirstName() {
+            return firstName;
         }
 
-        public void setGcmstatus(String gcmstatus) {
-            this.gcmstatus = gcmstatus;
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
         }
 
-        public String getUsercategory() {
-            return usercategory;
+        public String getFullName() {
+            return fullName;
         }
 
-        public void setUsercategory(String usercategory) {
-            this.usercategory = usercategory;
+        public void setFullName(String fullName) {
+            this.fullName = fullName;
         }
 
-        public String getBlatlong() {
-            return Blatlong;
+        public String getUserType() {
+            return userType;
         }
 
-        public void setBlatlong(String blatlong) {
-            Blatlong = blatlong;
+        public void setUserType(String userType) {
+            this.userType = userType;
         }
 
-        public String getVal2() {
-            return val2;
+        public String getMainUser() {
+            return mainUser;
         }
 
-        public void setVal2(String val2) {
-            this.val2 = val2;
+        public void setMainUser(String mainUser) {
+            this.mainUser = mainUser;
         }
 
-        public String getVal3() {
-            return val3;
+        public String getSubUserDetailId() {
+            return subUserDetailId;
         }
 
-        public void setVal3(String val3) {
-            this.val3 = val3;
+        public void setSubUserDetailId(String subUserDetailId) {
+            this.subUserDetailId = subUserDetailId;
         }
 
-        public String getVal4() {
-            return val4;
+        public String getCompanyId() {
+            return companyId;
         }
 
-        public void setVal4(String val4) {
-            this.val4 = val4;
+        public void setCompanyId(String companyId) {
+            this.companyId = companyId;
         }
 
-        public String getBtmainuserId() {
-            return btmainuserId;
+        public String getRoleId() {
+            return roleId;
         }
 
-        public void setBtmainuserId(String btmainuserId) {
-            this.btmainuserId = btmainuserId;
+        public void setRoleId(String roleId) {
+            this.roleId = roleId;
         }
 
-        public String getBtmailpwd() {
-            return btmailpwd;
+        public String getIsEmployeeTpt() {
+            return isEmployeeTpt;
         }
 
-        public void setBtmailpwd(String btmailpwd) {
-            this.btmailpwd = btmailpwd;
+        public void setIsEmployeeTpt(String isEmployeeTpt) {
+            this.isEmployeeTpt = isEmployeeTpt;
         }
 
-        public String getBtusername() {
-            return btusername;
+        public String getCreatedByPimsId() {
+            return createdByPimsId;
         }
 
-        public void setBtusername(String btusername) {
-            this.btusername = btusername;
+        public void setCreatedByPimsId(String createdByPimsId) {
+            this.createdByPimsId = createdByPimsId;
         }
 
-        public String getIsHotelUser() {
-            return IsHotelUser;
+        public String getIsEmployeeManager() {
+            return isEmployeeManager;
         }
 
-        public void setIsHotelUser(String isHotelUser) {
-            IsHotelUser = isHotelUser;
+        public void setIsEmployeeManager(String isEmployeeManager) {
+            this.isEmployeeManager = isEmployeeManager;
         }
 
-        public String getClientid() {
-            return clientid;
-        }
-
-        public void setClientid(String clientid) {
-            this.clientid = clientid;
-        }
-
-        public String getClientsecret() {
-            return clientsecret;
-        }
-
-        public void setClientsecret(String clientsecret) {
-            this.clientsecret = clientsecret;
-        }
-
-        public String getMainContactId() {
-            return MainContactId;
-        }
-
-        public void setMainContactId(String mainContactId) {
-            MainContactId = mainContactId;
-        }
-
-        public String getUsertype() {
-            return usertype;
-        }
-
-        public void setUsertype(String usertype) {
-            this.usertype = usertype;
-        }
-
-        public String getToken() {
-            return token;
-        }
-
-        public void setToken(String token) {
-            this.token = token;
-        }
     }
+
 }
