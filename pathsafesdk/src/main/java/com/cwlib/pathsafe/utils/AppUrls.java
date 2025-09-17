@@ -6,7 +6,7 @@ public class AppUrls {
 
     public static final String PSX_API_KEY = "pathsecur@987ggn";//""pathsecurex@987ggn";
     public static final String PSX_BASE_URL = "https://api.pathsecurex.com/";
-    public static final String PSX_API_BASE_PARAM = "locksdk.aspx";
+    public static final String PSX_API_BASE_PARAM = "locksdk.aspx?params=params_Web";
     public static final String PSX_LOGIN_API = "paramsval=userlogin";
     public static final String PSX_GET_DEVICE_INFO = "paramsval=lockdetails";
 

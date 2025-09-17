@@ -170,11 +170,14 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                     } catch (Exception e) {
                     }
                     try {
-                        DeviceInfoBean mDeviceInfoBean = (DeviceInfoBean) response.getResponse();
+                        String decResp = new ETSConfigs().etsDecryption(response.getResponse().toString(), mActivity);
+                        Log.e("decResp",decResp);
+                        DeviceInfoBean mDeviceInfoBean = new Gson().fromJson(decResp, DeviceInfoBean.class);
+                        Log.e("mDeviceInfoBean",new Gson().toJson(mDeviceInfoBean));
                         if (mDeviceInfoBean.getSuccess() == 1) {
                             mInfo = new ArrayList<>();
                             for (int a = 0; a < mDeviceInfoBean.getInfo().size(); a++) {
-                                if (CommonMethods.isValidString(mDeviceInfoBean.getInfo().get(a).getTtlockdata()) && CommonMethods.isValidString(mDeviceInfoBean.getInfo().get(a).getMacID())) {
+                                //if (CommonMethods.isValidString(mDeviceInfoBean.getInfo().get(a).getTtlockdata()) && CommonMethods.isValidString(mDeviceInfoBean.getInfo().get(a).getMacID())) {
                                     SensitiveInfo mbn = new SensitiveInfo();
                                     mbn.setLockData(mDeviceInfoBean.getInfo().get(a).getTtlockdata());
                                     mbn.setMACID(mDeviceInfoBean.getInfo().get(a).getMacID());
@@ -186,8 +189,9 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                                     mbn.setGPSDeviceId(mDeviceInfoBean.getInfo().get(a).getLockid());
                                     mbn.setLockname(mDeviceInfoBean.getInfo().get(a).getLockname());
                                     mInfo.add(mbn);
-                                }
+                                //}
                             }
+                            Log.e("mInfo",new Gson().toJson(mInfo));
                             UserSessions.saveMap(mActivity, (mInfo.size() > 0) ? mInfo : new ArrayList<>());
                             if (actionType == 1) {
                                 openLock(System.currentTimeMillis(), deviceCode);
@@ -257,7 +261,7 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                     break;
                 case AppUrls.PSX_API_TTLOCK_GET_LOCKDATA:
                     try {
-                        DeviceDetailBean mDeviceDetailBean = (DeviceDetailBean) response.getResponse();
+                        DeviceDetailBean mDeviceDetailBean = ( DeviceDetailBean)response.getResponse();
                         if (mDeviceDetailBean != null) {
                             ArrayList<SensitiveInfo> mMap2 = new ArrayList<>();
                             mMap2 = UserSessions.getMap(mActivity);
