@@ -36,7 +36,7 @@ public class JKHelper extends Application implements OnResponse<UniverSelObjct> 
     public void updateLockData(Activity ctx,String lockData,String lockMac, String lockId) {
         this.mActivity = ctx;
         LoginBean.InfoBean mBeanUser = UserSessions.getUserInfo(ctx);
-        String params = AppUrls.PSX_UPDATE_LOCK_DATA + "&type=9&userdetailid=" + mBeanUser.getUserDetailId() + "&lockdata=" + lockData+ "&lockMac=" + lockMac+ "&lockId=" + lockId;
+        String params = AppUrls.PSX_UPDATE_LOCK_DATA + "&type=12&userdetailid=" + mBeanUser.getUserDetailId() + "&lockdata=" + lockData+ "&lockMac=" + lockMac+ "&lockId=" + lockId;
         ETSConfigs mETSConfigs = new ETSConfigs();
         String encParam = mETSConfigs.etsEncryption(mActivity, params);
         new ApiCall(ctx).callApi(this, false,encParam,AppUrls.PSX_UPDATE_LOCK_DATA);
