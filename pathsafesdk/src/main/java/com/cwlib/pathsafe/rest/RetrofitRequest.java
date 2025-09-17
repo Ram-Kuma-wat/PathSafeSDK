@@ -110,7 +110,7 @@ public class RetrofitRequest {
             HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
                 @Override
                 public void log(String message) {
-                    Log.e("ApiResponse", message);
+                    //Log.e("ApiResponse", message);
                 }
             });
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

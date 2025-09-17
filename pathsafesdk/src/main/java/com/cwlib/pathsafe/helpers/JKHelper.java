@@ -3,7 +3,9 @@ package com.cwlib.pathsafe.helpers;
 import android.app.Activity;
 import android.app.Application;
 import android.app.ProgressDialog;
-  import com.cwlib.pathsafe.config.ETSConfigs;
+import android.util.Log;
+
+import com.cwlib.pathsafe.config.ETSConfigs;
 import com.cwlib.pathsafe.listeners.OnAuthListener;
 import com.cwlib.pathsafe.beans.AccountInfo;
 import com.cwlib.pathsafe.beans.LoginBean;
@@ -47,6 +49,10 @@ public class JKHelper extends Application implements OnResponse<UniverSelObjct> 
     public void onSuccess(UniverSelObjct response) {
         try {
             switch (response.getMethodname()) {
+                case AppUrls.PSX_UPDATE_LOCK_DATA:
+                    String decResp = new ETSConfigs().etsDecryption(response.getResponse().toString(), mActivity);
+
+                    break;
                 case AppUrls.PSX_API_TTLOCK_AUTH_TOKEN:
                     try {
                         Boolean isError = true;

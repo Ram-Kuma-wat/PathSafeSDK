@@ -14,7 +14,7 @@ public class ETSConfigs {
         String token = (mUserSession != null && CommonMethods.isValidString(mUserSession.getAccessToken(context))) ? mUserSession.getAccessToken(context) : "";
         String userid = (mUserSession != null && mUserSession.getUserInfo(context) != null) ? mUserSession.getUserInfo(context).getUsername() : "";
         try {
-            Log.e("strParam",strParam);
+            //Log.e("strParam",strParam);
             strParam = new AESHelper().etsEncryption(context,strParam,token,userid);
             return strParam;
         } catch (Exception e) {

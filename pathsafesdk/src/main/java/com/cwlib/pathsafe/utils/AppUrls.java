@@ -15,6 +15,6 @@ public class AppUrls {
     public static final String PSX_API_TTLOCK_GET_LOCKDATA = "/v3/key/get";
     public static final String BASE_URL_TTLOCK = "https://api.ttlock.com.cn";
     public static final String BASE_URL_TTLOCK1 = "https://euapi.sciener.com";
-    public static final String PSX_UPDATE_LOCK_DATA = "updatettlockdata";
-    public static final String PSX_SAVE_LOCK_RECORD = "lockopencommand";
+    public static final String PSX_UPDATE_LOCK_DATA = "paramsval=updatettlockdata";
+    public static final String PSX_SAVE_LOCK_RECORD = "paramsval=lockopencommand";
 }

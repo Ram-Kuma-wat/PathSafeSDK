@@ -16,7 +16,7 @@ public class ETSMain {
 
 
     public static String ETSEncryptUtils(String text, String val1, String val2) throws Exception {
-        text = text + "&tkv=" + val1 + "&contvals=" + val2;
+        //text = text + "&tkv=" + val1 + "&contvals=" + val2;
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         byte[] keyBytes = new byte[16];
         String key = AppUrls.PSX_API_KEY;

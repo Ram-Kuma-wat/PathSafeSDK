@@ -22,7 +22,7 @@ public class AESHelper {
         String responses = "";
         try {
             responses = ETSMain.ETSDecryptUtils(response);
-            Log.e("responsesDec",responses);
+           //Log.e("responsesDec",responses);
             JSONObject jsonObject = new JSONObject(responses);
             int success = jsonObject.getInt("success");
             if (success == 9999) {
