@@ -66,17 +66,18 @@ public class SplashActivity extends AppCompatActivity implements OnPSXAuthListen
         if (errorCode.equalsIgnoreCase("106")) {
             Toast.makeText(this, "Authenticated successfully.", Toast.LENGTH_SHORT).show();
             //startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+            mSafeLock.getDevices();
 
            // mSafeLock.actionManualLock("","",1);
         }
     }
 
     @Override
-    public void onPSXDevices(String errorCode, String message, ArrayList<DevicesBean.InfoBean> mListLocks) {
+    public void onPSXDevices(String errorCode, String message, ArrayList<DevicesBean.InfoBean> mListDevices) {
         Log.e("onPSXDevices", errorCode + "\n" + message);
         if (errorCode.equalsIgnoreCase("106")) {
-            if (CommonMethods.isValidArrayList(mListLocks)) {
-                Log.e("mListLocks", new Gson().toJson(mListLocks));
+            if (CommonMethods.isValidArrayList(mListDevices)) {
+                Log.e("mListLocks", new Gson().toJson(mListDevices));
 
 /*
                 for (int a = 0; a < mListLocks.size(); a++) {

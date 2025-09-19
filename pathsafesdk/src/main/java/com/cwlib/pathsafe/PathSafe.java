@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.util.Log;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
@@ -41,6 +42,7 @@ import com.ttlock.bl.sdk.entity.ControlLockResult;
 import com.ttlock.bl.sdk.entity.LockError;
 
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -135,17 +137,17 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
     public void saveDeviceRecord(SensitiveInfo mMap, String msg) {
         initApiCall();
         String strDeviceId = (CommonMethods.isValidString(mMap.getLOCK_ID())) ? mMap.getLOCK_ID() : (CommonMethods.isValidString(mMap.getLOCK_CODE()) ? mMap.getLOCK_CODE() : "");
-        String strVehNo =  CommonMethods.isValidString(mMap.getLOCK_CODE()) ? mMap.getLOCK_CODE() : "";
+        String strVehNo = CommonMethods.isValidString(mMap.getLOCK_CODE()) ? mMap.getLOCK_CODE() : "";
         LoginBean.InfoBean mBeanUser = UserSessions.getUserInfo(mActivity);
-        String params = AppUrls.PSX_SAVE_LOCK_RECORD + "&type=1&vno="+strVehNo+"&lockno="+strDeviceId+"&commandtype=" +msg+"&openedtype="+((msg.equalsIgnoreCase("locked") || msg.equalsIgnoreCase("Failed to close via APP"))?"50":"1")+"&lat=&lng=&timestamp=&fdate=&tdate=&batteryper=&address=&lockopenedby="+mBeanUser.getUserDetailId();
+        String params = AppUrls.PSX_SAVE_LOCK_RECORD + "&type=1&vno=" + strVehNo + "&lockno=" + strDeviceId + "&commandtype=" + msg + "&openedtype=" + ((msg.equalsIgnoreCase("locked") || msg.equalsIgnoreCase("Failed to close via APP")) ? "50" : "1") + "&lat=&lng=&timestamp=&fdate=&tdate=&batteryper=&address=&lockopenedby=" + mBeanUser.getUserDetailId();
         ETSConfigs mETSConfigs = new ETSConfigs();
         String encParam = mETSConfigs.etsEncryption(mActivity, params);
-        mApiCall.callApi(this, false,encParam,AppUrls.PSX_SAVE_LOCK_RECORD+"-1");
+        mApiCall.callApi(this, false, encParam, AppUrls.PSX_SAVE_LOCK_RECORD + "-1");
     }
 
     public void getLockRecords(String device_id) {
         actionType = 3;
-        getDeviceInfo(device_id);
+        getDeviceInfo(device_id,2);
     }
 
     private void getLockRecordsData(DeviceInfoBean.InfoBean mMap) {
@@ -154,10 +156,14 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
         String endDate = CommonMethods.getCurrentFormatedDate("MM/dd/yyyy");
 
         LoginBean.InfoBean mBeanUser = UserSessions.getUserInfo(mActivity);
-        String params = AppUrls.PSX_SAVE_LOCK_RECORD + "&type=2&vno="+mMap.getVehicleno()+"&lockno="+mMap.getLockid()+"&commandtype=&openedtype=&lat=&lng=&timestamp=&fdate="+startDate+"&tdate="+endDate+"&batteryper=&address=&lockopenedby="+mBeanUser.getUserDetailId();
+        String params = AppUrls.PSX_SAVE_LOCK_RECORD + "&type=2&vno=" + mMap.getVehicleno() + "&lockno=" + mMap.getLockid() + "&commandtype=&openedtype=&lat=&lng=&timestamp=&fdate=" + startDate + "&tdate=" + endDate + "&batteryper=&address=&lockopenedby=" + mBeanUser.getUserDetailId();
         ETSConfigs mETSConfigs = new ETSConfigs();
         String encParam = mETSConfigs.etsEncryption(mActivity, params);
-        mApiCall.callApi(this, false,encParam,AppUrls.PSX_SAVE_LOCK_RECORD+"-2");
+        mApiCall.callApi(this, false, encParam, AppUrls.PSX_SAVE_LOCK_RECORD + "-2");
+    }
+
+    public void getDevices() {
+        getDeviceInfo("",3);
     }
 
 
@@ -177,17 +183,17 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                             mInfo = new ArrayList<>();
                             for (int a = 0; a < mDeviceInfoBean.getInfo().size(); a++) {
                                 //if (CommonMethods.isValidString(mDeviceInfoBean.getInfo().get(a).getTtlockdata()) && CommonMethods.isValidString(mDeviceInfoBean.getInfo().get(a).getMacID())) {
-                                    SensitiveInfo mbn = new SensitiveInfo();
-                                    mbn.setLockData(mDeviceInfoBean.getInfo().get(a).getTtlockdata());
-                                    mbn.setMACID(mDeviceInfoBean.getInfo().get(a).getMacID());
-                                    mbn.setLOCK_CODE(mDeviceInfoBean.getInfo().get(a).getVehicleno());
-                                    mbn.setLOCK_ID(mDeviceInfoBean.getInfo().get(a).getLockid());
-                                    mbn.setBtlockid(mDeviceInfoBean.getInfo().get(a).getLockid());
-                                    mbn.setBtlockidval(mDeviceInfoBean.getInfo().get(a).getLockid());
-                                    mbn.setGPSDeviceCode(mDeviceInfoBean.getInfo().get(a).getLockid());
-                                    mbn.setGPSDeviceId(mDeviceInfoBean.getInfo().get(a).getLockid());
-                                    mbn.setLockname(mDeviceInfoBean.getInfo().get(a).getLockname());
-                                    mInfo.add(mbn);
+                                SensitiveInfo mbn = new SensitiveInfo();
+                                mbn.setLockData(mDeviceInfoBean.getInfo().get(a).getTtlockdata());
+                                mbn.setMACID(mDeviceInfoBean.getInfo().get(a).getMacID());
+                                mbn.setLOCK_CODE(mDeviceInfoBean.getInfo().get(a).getVehicleno());
+                                mbn.setLOCK_ID(mDeviceInfoBean.getInfo().get(a).getLockid());
+                                mbn.setBtlockid(mDeviceInfoBean.getInfo().get(a).getLockid());
+                                mbn.setBtlockidval(mDeviceInfoBean.getInfo().get(a).getLockid());
+                                mbn.setGPSDeviceCode(mDeviceInfoBean.getInfo().get(a).getLockid());
+                                mbn.setGPSDeviceId(mDeviceInfoBean.getInfo().get(a).getLockid());
+                                mbn.setLockname(mDeviceInfoBean.getInfo().get(a).getLockname());
+                                mInfo.add(mbn);
                                 //}
                             }
                             UserSessions.saveMap(mActivity, (mInfo.size() > 0) ? mInfo : new ArrayList<>());
@@ -201,9 +207,67 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                         } else {
                             if (actionType == 0) {
                                 onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock");
-                            } else {
+                            } else if (actionType == 1) {
                                 onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock");
+                            }else{
+                                onPSXRecords("100", mActivity.getString(R.string.something_wrong), null);
                             }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        if (actionType == 0) {
+                            onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock");
+                        } else if (actionType == 1)  {
+                            onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock");
+                        }else{
+                            onPSXRecords("100", mActivity.getString(R.string.something_wrong), null);
+                        }
+                    }
+                    break;
+                case AppUrls.PSX_GET_DEVICE_INFO + "-1":
+                    try {
+                        SFProgress.hideProgressDialog(mActivity);
+                    } catch (Exception e) {
+                    }
+                    try {
+                        String decResp = new ETSConfigs().etsDecryption(response.getResponse().toString(), mActivity);
+                        DevicesBean mDevicesBean = new Gson().fromJson(decResp, DevicesBean.class);
+                        if (mDevicesBean != null) {
+                            if (CommonMethods.isValidArrayList(mDevicesBean.getInfo())) {
+                                mInfo = new ArrayList<>();
+                                for (int a = 0; a < mDevicesBean.getInfo().size(); a++) {
+                                    SensitiveInfo mbn = new SensitiveInfo();
+                                    mbn.setLockData(mDevicesBean.getInfo().get(a).getTtlockdata());
+                                    mbn.setMACID(mDevicesBean.getInfo().get(a).getMacID());
+                                    mbn.setLOCK_CODE(mDevicesBean.getInfo().get(a).getVehicleno());
+                                    mbn.setLOCK_ID(mDevicesBean.getInfo().get(a).getLockid());
+                                    mbn.setBtlockid(mDevicesBean.getInfo().get(a).getLockid());
+                                    mbn.setBtlockidval(mDevicesBean.getInfo().get(a).getLockid());
+                                    mbn.setGPSDeviceCode(mDevicesBean.getInfo().get(a).getLockid());
+                                    mbn.setGPSDeviceId(mDevicesBean.getInfo().get(a).getLockid());
+                                    mbn.setLockname(mDevicesBean.getInfo().get(a).getLockname());
+                                    mInfo.add(mbn);
+                                }
+                                UserSessions.saveMap(mActivity, (mInfo.size() > 0) ? mInfo : new ArrayList<>());
+                                onPSXDevices("106", "success", mDevicesBean.getInfo());
+                            } else {//message from api
+                                onPSXDevices("102", mActivity.getString(R.string.something_wrong), null);
+                            }
+                        } else {
+                            onPSXDevices("101", mActivity.getString(R.string.something_wrong), null);
+                        }
+                    } catch (Exception ex1) {
+                        ex1.printStackTrace();
+                        onPSXDevices("100", mActivity.getString(R.string.something_wrong), null);
+                    }
+
+                    try {
+                        String decResp = new ETSConfigs().etsDecryption(response.getResponse().toString(), mActivity);
+                        DevicesBean mDevicesBean = new Gson().fromJson(decResp, DevicesBean.class);
+                        if (mDevicesBean != null && CommonMethods.isValidArrayList(mDevicesBean.getInfo())) {
+                            onPSXDevices("106", "Success", mDevicesBean.getInfo());
+                        } else {
+                            onPSXRecords("100", mActivity.getString(R.string.something_wrong), null);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -225,21 +289,21 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                                 //moveToNext(mLoginBean.getLoginvalidation().get(0));
                             } /*else if (CommonMethods.isValidString(mLoginBean.getReturnMessage().get(0).getReturnmessage())) {
                                 onAuthResult("105", mLoginBean.getLoginvalidation().get(0).getReturnmessage());
-                            } */else {
+                            } */ else {
                                 onAuthResult("104", mActivity.getResources().getString(R.string.error_no_role));
                             }
                         } /*else if (CommonMethods.isValidString(mLoginBean.getMessage())) {
                             onAuthResult("103", mLoginBean.getMessage());
                         } else if (CommonMethods.isValidArrayList(mLoginBean.getReturnMessage()) && CommonMethods.isValidString(mLoginBean.getReturnMessage().get(0).getReturnmessage())) {
                             onAuthResult("102", mLoginBean.getReturnMessage().get(0).getReturnmessage());
-                        } */else {
+                        } */ else {
                             onAuthResult("101", mActivity.getString(R.string.something_wrong));
                         }
                     } catch (Exception e) {
                         onAuthResult("101", mActivity.getString(R.string.something_wrong));
                     }
                     break;
-                case AppUrls.PSX_SAVE_LOCK_RECORD+"-2":
+                case AppUrls.PSX_SAVE_LOCK_RECORD + "-2":
                     try {
                         String decResp = new ETSConfigs().etsDecryption(response.getResponse().toString(), mActivity);
                         JSONObject jsonObjct = new JSONObject(decResp);
@@ -260,7 +324,7 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                     break;
                 case AppUrls.PSX_API_TTLOCK_GET_LOCKDATA:
                     try {
-                        DeviceDetailBean mDeviceDetailBean = ( DeviceDetailBean)response.getResponse();
+                        DeviceDetailBean mDeviceDetailBean = (DeviceDetailBean) response.getResponse();
                         if (mDeviceDetailBean != null) {
                             ArrayList<SensitiveInfo> mMap2 = new ArrayList<>();
                             mMap2 = UserSessions.getMap(mActivity);
@@ -306,9 +370,9 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
     }
 
 
-    private void onPSXDevices(String code, String msg, ArrayList<DevicesBean.InfoBean> mListLocks) {
+    private void onPSXDevices(String code, String msg, ArrayList<DevicesBean.InfoBean> mListDevices) {
         if (mAuthListener != null) {
-            mAuthListener.onPSXDevices(code, msg, mListLocks);
+            mAuthListener.onPSXDevices(code, msg, mListDevices);
         }
     }
 
@@ -347,7 +411,7 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                         onAuthResult("100", error);
                     }
                     break;
-                case AppUrls.PSX_SAVE_LOCK_RECORD+"-2":
+                case AppUrls.PSX_SAVE_LOCK_RECORD + "-2":
                     if (mAuthListener != null) {
                         onPSXRecords("100", error, null);
                     }
@@ -389,7 +453,7 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                     STORAGE_PERMISSION_CODE
             );
         }
-        getDeviceInfo(lockId);
+        getDeviceInfo(lockId,1);
     }
 
     int actionType = -1;
@@ -523,7 +587,7 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                             SFProgress.hideProgressDialog(mActivity);
                             if (actionCounter == 0) {
                                 actionCounter++;
-                                getDeviceInfo(mDeviceCode);
+                                getDeviceInfo(mDeviceCode,1);
                             } else {
                                 try {
                                     Log.e("Lockerror", error.getErrorMsg() + "\n" + error.getDescription());
@@ -602,30 +666,42 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
         return mBn;
     }
 
-    public void getDeviceInfo(String... strParams) {
+    public void getDeviceInfo(String strParams,int type) {
         initApiCall();
         try {
             SFProgress.showProgressDialog(mActivity, true);
             LoginBean.InfoBean mBeanUser = UserSessions.getUserInfo(mActivity);
-            if (mBeanUser !=null) {
-                String params = AppUrls.PSX_GET_DEVICE_INFO + "&type=1&userdetailid=" + mBeanUser.getUserDetailId() + "&lockid=" + strParams[0];
+            if (mBeanUser != null) {
+                String params = AppUrls.PSX_GET_DEVICE_INFO + "&type=1&userdetailid=" + mBeanUser.getUserDetailId() + "&lockid=" + strParams;
                 ETSConfigs mETSConfigs = new ETSConfigs();
                 String encParam = mETSConfigs.etsEncryption(mActivity, params);
-                mApiCall.callApi(this, true,encParam,AppUrls.PSX_GET_DEVICE_INFO);
-            }else{
+                mApiCall.callApi(this, true, encParam, AppUrls.PSX_GET_DEVICE_INFO + (type==1 ? "" : "-1"));
+            } else {
+                if (type==1) {
+                    if (actionType == 0) {
+                        onLockAction("100", "Failed to lock the device.", "close lock");
+                    } else {
+                        onLockAction("102", "failed to open the lock.", "open lock");
+                    }
+                } else if (type==3){
+                    onPSXDevices("100", mActivity.getString(R.string.something_wrong), null);
+                }else{
+                    onPSXRecords("100", mActivity.getString(R.string.something_wrong), null);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("mBeanUser", "Invalid login data");
+            if (type==1) {
                 if (actionType == 0) {
                     onLockAction("100", "Failed to lock the device.", "close lock");
                 } else {
                     onLockAction("102", "failed to open the lock.", "open lock");
                 }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("mBeanUser","Invalid login data");
-            if (actionType == 0) {
-                onLockAction("100", "Failed to lock the device.", "close lock");
-            } else {
-                onLockAction("102", "failed to open the lock.", "open lock");
+            } else if (type==3){
+                onPSXDevices("100", mActivity.getString(R.string.something_wrong), null);
+            }else{
+                onPSXRecords("100", mActivity.getString(R.string.something_wrong), null);
             }
         }
     }
