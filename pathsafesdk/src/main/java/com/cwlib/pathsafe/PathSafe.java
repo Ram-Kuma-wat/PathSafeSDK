@@ -675,7 +675,7 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                 String params = AppUrls.PSX_GET_DEVICE_INFO + "&type=1&userdetailid=" + mBeanUser.getUserDetailId() + "&lockid=" + strParams;
                 ETSConfigs mETSConfigs = new ETSConfigs();
                 String encParam = mETSConfigs.etsEncryption(mActivity, params);
-                mApiCall.callApi(this, true, encParam, AppUrls.PSX_GET_DEVICE_INFO + (type==1 ? "" : "-1"));
+                mApiCall.callApi(this, true, encParam, AppUrls.PSX_GET_DEVICE_INFO + ((type==1 || type==2) ? "" : "-1"));
             } else {
                 if (type==1) {
                     if (actionType == 0) {
