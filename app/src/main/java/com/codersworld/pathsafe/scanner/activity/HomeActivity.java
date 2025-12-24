@@ -104,9 +104,15 @@ public class HomeActivity extends AppCompatActivity implements OnPSXAuthListener
     }
 
     @Override
-    public void onPSXDeviceAction(String code, String message, String type) {
+    public void onPSXDeviceBatteryCheck(String code, String message, int batteryPer) {
+        Log.e("battery_per", code + "\n" + message + "\n" +batteryPer);
+
+    }
+
+    @Override
+    public void onPSXDeviceAction(String code, String message, String type,int batteryPer) {
         Toast.makeText(this, " "+message, Toast.LENGTH_SHORT).show();
 
-        Log.e("action_lock", code + "\n" + message + "\n" + type);
+        Log.e("action_lock", code + "\n" + message + "\n" + type+"\n"+batteryPer);
     }
 }

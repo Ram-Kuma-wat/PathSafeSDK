@@ -37,6 +37,7 @@ import com.cwlib.pathsafe.utils.SFProgress;
 import com.google.gson.Gson;
 import com.ttlock.bl.sdk.api.TTLockClient;
 import com.ttlock.bl.sdk.callback.ControlLockCallback;
+import com.ttlock.bl.sdk.callback.GetBatteryLevelCallback;
 import com.ttlock.bl.sdk.constant.ControlAction;
 import com.ttlock.bl.sdk.entity.ControlLockResult;
 import com.ttlock.bl.sdk.entity.LockError;
@@ -144,6 +145,16 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
         String encParam = mETSConfigs.etsEncryption(mActivity, params);
         mApiCall.callApi(this, false, encParam, AppUrls.PSX_SAVE_LOCK_RECORD + "-1");
     }
+    private void saveBatteryStatus(SensitiveInfo mMap, int batteryPer) {
+        initApiCall();
+        String strDeviceId = (CommonMethods.isValidString(mMap.getLOCK_ID())) ? mMap.getLOCK_ID() : (CommonMethods.isValidString(mMap.getLOCK_CODE()) ? mMap.getLOCK_CODE() : "");
+        String strVehNo = CommonMethods.isValidString(mMap.getLOCK_CODE()) ? mMap.getLOCK_CODE() : "";
+        LoginBean.InfoBean mBeanUser = UserSessions.getUserInfo(mActivity);
+        String params = AppUrls.PSX_SAVE_BATTERY_STATUS + "&type=2&vno=" + strVehNo + "&lockid=" + strDeviceId + "&commandtype=&openedtype=&lat=&lng=&timestamp=&fdate=&tdate=&batteryper="+batteryPer+"&address=&userdetailid=" + mBeanUser.getUserDetailId();
+        ETSConfigs mETSConfigs = new ETSConfigs();
+        String encParam = mETSConfigs.etsEncryption(mActivity, params);
+        mApiCall.callApi(this, false, encParam, AppUrls.PSX_SAVE_BATTERY_STATUS + "-2");
+    }
 
     public void getLockRecords(String device_id) {
         actionType = 3;
@@ -203,12 +214,18 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                                 closeLock(deviceCode);
                             } else if (actionType == 3) {
                                 getLockRecordsData(mDeviceInfoBean.getInfo().get(0));
+                            } else if (actionType == 33) {
+                                batteryStatus();
                             }
                         } else {
                             if (actionType == 0) {
-                                onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock");
+                                onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock",0);
                             } else if (actionType == 1) {
-                                onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock");
+                                onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock",0);
+                            }else if (actionType == 33) {
+                                if (mAuthListener != null) {
+                                    mAuthListener.onPSXDeviceBatteryCheck("192", mActivity.getString(R.string.something_wrong), 0);
+                                }
                             }else{
                                 onPSXRecords("100", mActivity.getString(R.string.something_wrong), null);
                             }
@@ -216,9 +233,13 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                     } catch (Exception e) {
                         e.printStackTrace();
                         if (actionType == 0) {
-                            onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock");
+                            onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock",0);
                         } else if (actionType == 1)  {
-                            onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock");
+                            onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock",0);
+                        } else if (actionType == 33)  {
+                            if (mAuthListener != null) {
+                                mAuthListener.onPSXDeviceBatteryCheck("192", e.getMessage(), 0);
+                            }
                         }else{
                             onPSXRecords("100", mActivity.getString(R.string.something_wrong), null);
                         }
@@ -272,9 +293,9 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                     } catch (Exception e) {
                         e.printStackTrace();
                         if (actionType == 0) {
-                            onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock");
+                            onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock",0);
                         } else {
-                            onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock");
+                            onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock",0);
                         }
                     }
                     break;
@@ -356,9 +377,9 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                     } catch (Exception ex1) {
                         ex1.printStackTrace();
                         if (actionType == 0) {
-                            onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock");
+                            onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock",0);
                         } else {
-                            onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock");
+                            onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock",0);
                         }
 
                     }
@@ -388,9 +409,9 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
         }
     }
 
-    private void onLockAction(String code, String msg, String type) {
+    private void onLockAction(String code, String msg, String type,int batteryPer) {
         if (mAuthListener != null) {
-            mAuthListener.onPSXDeviceAction(code, msg, type);
+            mAuthListener.onPSXDeviceAction(code, msg, type,batteryPer);
         }
     }
 
@@ -483,9 +504,9 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
         long unlockdate = System.currentTimeMillis();
         SensitiveInfo mMap = validateDevice(deviceCode);
         if (mMap == null) {
-            onLockAction("100", "Invalid device info", (actionType == 0) ? "close lock" : "open lock");
+            onLockAction("100", "Invalid device info", (actionType == 0) ? "close lock" : "open lock",0);
         } else if (iniDateTime < unlockdate) {
-            onLockAction("100", "Please Refresh Page", (actionType == 0) ? "close lock" : "open lock");
+            onLockAction("100", "Please Refresh Page", (actionType == 0) ? "close lock" : "open lock",0);
             return;
         }
 
@@ -501,18 +522,35 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                 public void onControlLockSuccess(ControlLockResult controlLockResult) {
                     SFProgress.hideProgressDialog(mActivity);
                     try {
-                        if (actionType == 0) {
-                            onLockAction("106", "Device is locked successfully.", "close lock");
-                        } else {
-                            onLockAction("106", "Lock opened successfully.", "open lock");
-                        }
+                        TTLockClient.getDefault().getBatteryLevel(lockData, macID, new GetBatteryLevelCallback() {
+                            @Override
+                            public void onGetBatteryLevelSuccess(int electricQuantity) {
+                                if (actionType == 0) {
+                                    onLockAction("106", "Device is locked successfully.", "close lock",electricQuantity);
+                                } else {
+                                    onLockAction("106", "Lock opened successfully.", "open lock",electricQuantity);
+                                }
+                                saveBatteryStatus(mMap,electricQuantity);
+                            }
+
+                            @Override
+                            public void onFail(LockError error) {
+                                if (actionType == 0) {
+                                    onLockAction("106", "Device is locked successfully.", "close lock",0);
+                                } else {
+                                    onLockAction("106", "Lock opened successfully.", "open lock",0);
+                                }
+                            }
+                        });
+
                         saveDeviceRecord(mMap, (actionType == 0) ? "locked" : "Unlocked");
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         if (actionType == 0) {
-                            onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock");
+                            onLockAction("101", mActivity.getString(R.string.something_wrong)+e.getMessage(), "close lock",0);
                         } else {
-                            onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock");
+                            onLockAction("102", mActivity.getString(R.string.something_wrong)+e.getMessage(), "open lock",0);
                         }
                         saveDeviceRecord(mMap, (actionType == 0) ? "Failed to close via APP" : "Failed to open via APP");
                     }
@@ -528,9 +566,9 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                         e.printStackTrace();
                     }
                     if (actionType == 0) {
-                        onLockAction("100", "Failed to lock the device.", "close lock");
+                        onLockAction("100", "Failed to lock the device.", "close lock",0);
                     } else {
-                        onLockAction("102", "failed to open the lock.", "open lock");
+                        onLockAction("102", "failed to open the lock.", "open lock",0);
                     }
                     saveDeviceRecord(mMap, (actionType == 0) ? "Failed to close via APP" : "Failed to open via APP");
                 }
@@ -553,7 +591,7 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                 iniDateTime = System.currentTimeMillis() + 1800000;
                 long unlockdate = System.currentTimeMillis();
                 if (iniDateTime < unlockdate) {
-                    onLockAction("100", "Please Refresh Page", (mActionType == 0) ? "close lock" : "open lock");
+                    onLockAction("100", "Please Refresh Page", (mActionType == 0) ? "close lock" : "open lock",0);
                     return;
                 }
 
@@ -564,18 +602,39 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                         public void onControlLockSuccess(ControlLockResult controlLockResult) {
                             SFProgress.hideProgressDialog(mActivity);
                             try {
-                                if (mActionType == 0) {
-                                    onLockAction("106", "Device is locked successfully.", "close lock");
-                                } else {
-                                    onLockAction("106", "Lock opened successfully.", "open lock");
-                                }
+
+                                TTLockClient.getDefault().getBatteryLevel(lockData, macID, new GetBatteryLevelCallback() {
+                                    @Override
+                                    public void onGetBatteryLevelSuccess(int electricQuantity) {
+                                        if (mActionType == 0) {
+                                            onLockAction("106", "Device is locked successfully.", "close lock",electricQuantity);
+                                        } else {
+                                            onLockAction("106", "Lock opened successfully.", "open lock",electricQuantity);
+                                        }
+                                        SensitiveInfo mMap = validateDevice(deviceCode);
+                                        if (mMap != null) {
+                                            saveBatteryStatus(mMap,electricQuantity);
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onFail(LockError error) {
+                                        if (mActionType == 0) {
+                                            onLockAction("106", "Device is locked successfully.", "close lock",0);
+                                        } else {
+                                            onLockAction("106", "Lock opened successfully.", "open lock",0);
+                                        }
+                                    }
+                                });
+
                                 //saveDeviceRecord(mMap, (mActionType == 0) ? "Closed via APP" : "Opened via APP");
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 if (mActionType == 0) {
-                                    onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock");
+                                    onLockAction("101", mActivity.getString(R.string.something_wrong), "close lock",0);
                                 } else {
-                                    onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock");
+                                    onLockAction("102", mActivity.getString(R.string.something_wrong), "open lock",0);
                                 }
                                 //saveDeviceRecord(mMap, (mActionType == 0) ? "Failed to close via APP" : "Failed to open via APP");
                             }
@@ -595,9 +654,9 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                                     e.printStackTrace();
                                 }
                                 if (mActionType == 0) {
-                                    onLockAction("100", "Failed to lock the device.", "close lock");
+                                    onLockAction("100", "Failed to lock the device.", "close lock",0);
                                 } else {
-                                    onLockAction("102", "failed to open the lock.", "open lock");
+                                    onLockAction("102", "failed to open the lock.", "open lock",0);
                                 }
                             }
                             // saveDeviceRecord(mMap, (mActionType == 0) ? "Failed to close via APP" : "Failed to open via APP");
@@ -611,6 +670,73 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
         }
     }
 
+    public void getLockBatteryLevel(String deviceCode) {
+        this.deviceCode = deviceCode;
+        actionType = 33;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+           /* try {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                Uri uri = Uri.fromParts("package", mActivity.getPackageName(), null);
+                intent.setData(uri);
+                mActivity.startActivityForResult(intent,STORAGE_PERMISSION_CODE);
+            }catch (Exception e){
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                mActivity.startActivityForResult(intent,STORAGE_PERMISSION_CODE);
+            }*/
+        } else {
+            //Below android 11
+            ActivityCompat.requestPermissions(
+                    mActivity,
+                    new String[]{
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE
+                    },
+                    STORAGE_PERMISSION_CODE
+            );
+        }
+        getDeviceInfo(deviceCode,33);
+    }
+
+    private void batteryStatus (){
+        SensitiveInfo mMap = validateDevice(deviceCode);
+        if (mAuthListener != null) {
+            mAuthListener.onPSXDeviceBatteryCheck("190", "Invalid device info",0);
+        }
+
+        String lockData = (CommonMethods.isValidString(mMap.getLockData())) ? mMap.getLockData() : "";
+        String macID = (CommonMethods.isValidString(mMap.getMACID())) ? mMap.getMACID() : "";
+        String btlockid = (CommonMethods.isValidString(mMap.getBtlockid())) ? mMap.getBtlockid() : "";
+        if (!CommonMethods.isValidString(lockData) || !CommonMethods.isValidString(macID)) {
+            getLockData(btlockid);
+        } else {
+            SFProgress.showProgressDialog(mActivity, true);
+
+            TTLockClient.getDefault().getBatteryLevel(lockData, macID, new GetBatteryLevelCallback() {
+                @Override
+                public void onGetBatteryLevelSuccess(int electricQuantity) {
+                    SFProgress.hideProgressDialog(mActivity);
+                    if (mAuthListener != null) {
+                    mAuthListener.onPSXDeviceBatteryCheck("191", "",electricQuantity);
+                    }
+                    saveBatteryStatus(mMap,electricQuantity);
+
+                    //makeToast("lock battery is " + electricQuantity + "%");
+                }
+
+                @Override
+                public void onFail(LockError error) {
+                    SFProgress.hideProgressDialog(mActivity);
+                    if (mAuthListener != null) {
+                        mAuthListener.onPSXDeviceBatteryCheck("192", error.getErrorMsg(), 0);
+                    }
+                    //makeErrorToast(error);
+                }
+            });
+        }
+
+    }
     public void openLock(long unlockdate, String deviceCode) {
         checkPermission();
         final LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
@@ -675,16 +801,20 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
                 String params = AppUrls.PSX_GET_DEVICE_INFO + "&type=1&userdetailid=" + mBeanUser.getUserDetailId() + "&lockid=" + strParams;
                 ETSConfigs mETSConfigs = new ETSConfigs();
                 String encParam = mETSConfigs.etsEncryption(mActivity, params);
-                mApiCall.callApi(this, true, encParam, AppUrls.PSX_GET_DEVICE_INFO + ((type==1 || type==2) ? "" : "-1"));
+                mApiCall.callApi(this, true, encParam, AppUrls.PSX_GET_DEVICE_INFO + ((type==1 || type==2 || type==33) ? "" : "-1"));
             } else {
                 if (type==1) {
                     if (actionType == 0) {
-                        onLockAction("100", "Failed to lock the device.", "close lock");
+                        onLockAction("100", "Failed to lock the device.", "close lock",0);
                     } else {
-                        onLockAction("102", "failed to open the lock.", "open lock");
+                        onLockAction("102", "failed to open the lock.", "open lock",0);
                     }
                 } else if (type==3){
                     onPSXDevices("100", mActivity.getString(R.string.something_wrong), null);
+                }else if (type==33){
+                    if (mAuthListener != null) {
+                        mAuthListener.onPSXDeviceBatteryCheck("192", mActivity.getString(R.string.something_wrong), 0);
+                    }
                 }else{
                     onPSXRecords("100", mActivity.getString(R.string.something_wrong), null);
                 }
@@ -694,11 +824,15 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
             Log.e("mBeanUser", "Invalid login data");
             if (type==1) {
                 if (actionType == 0) {
-                    onLockAction("100", "Failed to lock the device.", "close lock");
+                    onLockAction("100", "Failed to lock the device.", "close lock",0);
                 } else {
-                    onLockAction("102", "failed to open the lock.", "open lock");
+                    onLockAction("102", "failed to open the lock.", "open lock",0);
                 }
-            } else if (type==3){
+            } else if (type==33){
+                if (mAuthListener != null) {
+                    mAuthListener.onPSXDeviceBatteryCheck("192", mActivity.getString(R.string.something_wrong), 0);
+                }
+            }else if (type==3){
                 onPSXDevices("100", mActivity.getString(R.string.something_wrong), null);
             }else{
                 onPSXRecords("100", mActivity.getString(R.string.something_wrong), null);

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 
 public class SplashActivity extends AppCompatActivity implements OnPSXAuthListener {
-    PathSafe mSafeLock;
+    PathSafe mPathSafe;
     EditText etId;
     TextView txtResult;
 
@@ -31,30 +31,35 @@ public class SplashActivity extends AppCompatActivity implements OnPSXAuthListen
         setContentView(R.layout.activity_splash);
         etId = findViewById(R.id.etLockId);
         txtResult = findViewById(R.id.txtResult);
-        mSafeLock = new PathSafe(SplashActivity.this, this);
-      //  mSafeLock.authUser("uffizio", "uffizio123", "1.0", "Safe SDK demo");
-        //mSafeLock.authUser("prashant67", "prashant67", "1.0", "Safe SDK demo");
-        //mSafeLock.authUser("prashant67", "prashant67", "1.0", "Safe SDK demo");
-        mSafeLock.authUser("fltlock@7896", "789654123", "1.0", "PathSafe SDK demo");
+        mPathSafe = new PathSafe(SplashActivity.this, this);
+        //mPathSafe.authUser("vrllock@gmail.com", "vrltms@9569", "1.0", "TMS Pathsecurex");
+        mPathSafe.authUser("fltlock@7896", "789654123", "1.0", "PathSafe SDK demo");
     }
-//        mSafeLock.getLockRecords("9605866");
+//        mPathSafe.getLockRecords("9605866");
     public void onOpen(View v) {
         if (CommonMethods.isValidString(etId.getText().toString())) {
-            mSafeLock.performDeviceAction(etId.getText().toString(), 1);
+            mPathSafe.performDeviceAction(etId.getText().toString(), 1);
         } else {
             Toast.makeText(this, "Enter device id", Toast.LENGTH_SHORT).show();
         }
     }
     public void onClose(View v) {
         if (CommonMethods.isValidString(etId.getText().toString())) {
-            mSafeLock.performDeviceAction(etId.getText().toString(), 0);
+            mPathSafe.performDeviceAction(etId.getText().toString(), 0);
         } else {
             Toast.makeText(this, "Enter device id", Toast.LENGTH_SHORT).show();
         }
     }
     public void getRecords(View v) {
         if (CommonMethods.isValidString(etId.getText().toString())) {
-            mSafeLock.getLockRecords(etId.getText().toString());
+            mPathSafe.getLockRecords(etId.getText().toString());
+        } else {
+            Toast.makeText(this, "Enter device id", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void getBatteryStatus(View v) {
+        if (CommonMethods.isValidString(etId.getText().toString())) {
+            mPathSafe.getLockBatteryLevel(etId.getText().toString());
         } else {
             Toast.makeText(this, "Enter device id", Toast.LENGTH_SHORT).show();
         }
@@ -66,9 +71,9 @@ public class SplashActivity extends AppCompatActivity implements OnPSXAuthListen
         if (errorCode.equalsIgnoreCase("106")) {
             Toast.makeText(this, "Authenticated successfully.", Toast.LENGTH_SHORT).show();
             //startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-            mSafeLock.getDevices();
+            mPathSafe.getDevices();
 
-           // mSafeLock.actionManualLock("","",1);
+           // mPathSafe.actionManualLock("","",1);
         }
     }
 
@@ -83,7 +88,7 @@ public class SplashActivity extends AppCompatActivity implements OnPSXAuthListen
                 for (int a = 0; a < mListLocks.size(); a++) {
                     Log.e("locakname", mListLocks.get(a).getVehicleNumber());
                     if (mListLocks.get(a).getVehicleNumber().equalsIgnoreCase("FRANCHISE LOCK")) {
-                        mSafeLock.openLock(System.currentTimeMillis(), mListLocks.get(a).getDeviceCode());
+                        mPathSafe.openLock(System.currentTimeMillis(), mListLocks.get(a).getDeviceCode());
                     }
                 }
 */
@@ -107,8 +112,17 @@ public class SplashActivity extends AppCompatActivity implements OnPSXAuthListen
     }
 
     @Override
-    public void onPSXDeviceAction(String code, String message, String type) {
+    public void onPSXDeviceBatteryCheck(String code, String message, int batteryPer) {
+        Log.e("battery_per", code + "\n" + message + "\n" +batteryPer);
+        txtResult.setText("code : "+code+"\nmessage : "+message+"\nBattery Status : "+batteryPer+"%");
+
+
+    }
+
+    @Override
+    public void onPSXDeviceAction(String code, String message, String type,int batteryPer) {
         Toast.makeText(this, " "+message, Toast.LENGTH_SHORT).show();
+        txtResult.setText("code : "+code+"\nMessage : "+message+"\nBattery Status : "+batteryPer+"%");
 
         Log.e("action_lock", code + "\n" + message + "\n" + type);
     }

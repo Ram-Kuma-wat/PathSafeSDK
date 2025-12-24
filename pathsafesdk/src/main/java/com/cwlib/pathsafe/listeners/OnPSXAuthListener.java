@@ -9,5 +9,6 @@ public interface OnPSXAuthListener {
     void onPSXAuth(String code,String message);
     void onPSXDevices(String code, String message, ArrayList<DevicesBean.InfoBean> mListDevices);
     void onPSXRecords(String code, String message, ArrayList<DeviceRecordsBean.InfoBean> mListLocks);
-    void onPSXDeviceAction(String code, String message,String type);
+    void onPSXDeviceAction(String code, String message,String type,int batteryPer);
+    void onPSXDeviceBatteryCheck(String code, String message,int batteryPer);
 }

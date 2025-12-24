@@ -17,4 +17,5 @@ public class AppUrls {
     public static final String BASE_URL_TTLOCK1 = "https://euapi.sciener.com";
     public static final String PSX_UPDATE_LOCK_DATA = "paramsval=updatettlockdata";
     public static final String PSX_SAVE_LOCK_RECORD = "paramsval=lockopencommand";
+    public static final String PSX_SAVE_BATTERY_STATUS = "paramsval=updatebattery";
 }
