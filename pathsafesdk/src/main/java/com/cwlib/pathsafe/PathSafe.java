@@ -481,10 +481,32 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
 
     public void closeLock(String deviceCode/*String lockData, String macID*/) {
         checkPermission();
-        final LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm =
+                (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
+
+        boolean locationEnabled;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            locationEnabled = lm.isLocationEnabled();
+        } else {
+            boolean gps = false;
+            boolean network = false;
+            try {
+                gps = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            } catch (Exception ignored) {}
+            try {
+                network = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            } catch (Exception ignored) {}
+            locationEnabled = gps || network;
+        }
+
+        if (!locationEnabled) {
+            buildAlertMessageNoGps();
+        }
+/*        final LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
-        } else {
+        }*/ else {
             actionType = 0;
             this.deviceCode = deviceCode;
             PermissionModule m = new PermissionModule(mActivity);
@@ -582,10 +604,32 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
         actionType = mActionType;
         deviceCode = mDeviceCode;
         checkPermission();
-        final LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm =
+                (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
+
+        boolean locationEnabled;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            locationEnabled = lm.isLocationEnabled();
+        } else {
+            boolean gps = false;
+            boolean network = false;
+            try {
+                gps = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            } catch (Exception ignored) {}
+            try {
+                network = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            } catch (Exception ignored) {}
+            locationEnabled = gps || network;
+        }
+
+        if (!locationEnabled) {
+            buildAlertMessageNoGps();
+        }
+/*        final LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
-        } else {
+        }*/ else {
             PermissionModule m = new PermissionModule(mActivity);
             if (m.checkBTPermissions()) {
                 iniDateTime = System.currentTimeMillis() + 1800000;
@@ -739,10 +783,32 @@ public class PathSafe implements OnResponse<UniverSelObjct>, OnAuthListener {
     }
     public void openLock(long unlockdate, String deviceCode) {
         checkPermission();
-        final LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm =
+                (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
+
+        boolean locationEnabled;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            locationEnabled = lm.isLocationEnabled();
+        } else {
+            boolean gps = false;
+            boolean network = false;
+            try {
+                gps = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            } catch (Exception ignored) {}
+            try {
+                network = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            } catch (Exception ignored) {}
+            locationEnabled = gps || network;
+        }
+
+        if (!locationEnabled) {
+            buildAlertMessageNoGps();
+        }
+/*        final LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
-        } else {
+        }*/else {
             this.deviceCode = deviceCode;
             actionType = 1;
             PermissionModule m = new PermissionModule(mActivity);
