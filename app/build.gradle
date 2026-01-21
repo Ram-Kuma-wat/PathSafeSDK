@@ -23,6 +23,9 @@ android {
         exclude 'META-INF/rxjava.properties'
         exclude 'META-INF/LICENSE-FIREBASE.txt'
         exclude 'META-INF/NOTICE'
+        jniLibs {
+            useLegacyPackaging true
+        }
     }
     dexOptions {
         javaMaxHeapSize "4g"
